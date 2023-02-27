@@ -49,7 +49,7 @@ Projeto de Digital Business Enablement.
 
 ---
 
-###Detalhar Despesa
+## Detalhar Despesa
 `GET` /piggybank/api/despesa/{id}
 
 **Exemplo de corpo da resposta**
