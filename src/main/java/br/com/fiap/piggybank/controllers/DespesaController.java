@@ -44,25 +44,25 @@ public class DespesaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(despesa);
     }
     
-    @GetMapping("/api/despesas/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Despesa> show(@PathVariable Long id){
         log.info("buscando despesa com id " + id);
-        var despesaEncontrada = despesas.stream().filter(d -> d.getId().equals(id)).findFirst();
+        var despesaEncontrada = repository.findById(id);
 
         if (despesaEncontrada.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(despesaEncontrada.get());
 
     }
 
-    @DeleteMapping("/api/despesas/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Despesa> destroy(@PathVariable Long id){
         log.info("apagando despesa com id " + id);
-        var despesaEncontrada = despesas.stream().filter(d -> d.getId().equals(id)).findFirst();
+        var despesaEncontrada = repository.findById(id);
 
         if (despesaEncontrada.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
 
         despesas.remove(despesaEncontrada.get());
 
@@ -70,7 +70,7 @@ public class DespesaController {
 
     }
 
-    @PutMapping("/api/despesas/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Despesa> update(@PathVariable Long id, @RequestBody Despesa despesa){
         log.info("alterando despesa com id " + id);
         var despesaEncontrada = despesas.stream().filter(d -> d.getId().equals(id)).findFirst();
@@ -78,10 +78,9 @@ public class DespesaController {
         if (despesaEncontrada.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        despesas.remove(despesaEncontrada.get());
-        despesa.setId(id);
-        despesas.add(despesa);
+        var despesaAtualizada = despesaEncontrada.get();
 
+        repository.save(despesaAtualizada);
 
         return ResponseEntity.ok(despesa);
 

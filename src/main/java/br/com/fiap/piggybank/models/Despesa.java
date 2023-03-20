@@ -16,6 +16,8 @@ public class Despesa {
     private BigDecimal valor;
     private LocalDate data;
     private String descricao;
+
+    protected Despesa(){}
    
     public Despesa(BigDecimal valor, LocalDate data, String descricao) {
         this.valor = valor;
